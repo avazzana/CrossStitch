@@ -112,7 +112,7 @@ public class Component extends JComponent {
 				double y1 = 0.0 + j * s;
 				double dis = distance(x1, y1);
 				boolean b = dis > r;
-				squares[i][j] = new Square(colors.get(0), x + i * s, y + j * s, s, b, new int[] {0,0,0,0});
+				squares[i][j] = new Square(colors.get(0), x + i * s, y + j * s, s, b);
 			}
 		}
 	}
@@ -142,7 +142,6 @@ public class Component extends JComponent {
 	public void scanIn() {
 		try {
 			Scanner sc = new Scanner(new File(file));
-			Scanner sc2 = new Scanner(new File(fileoutline));
 			int i = 0;
 			boolean cdone = false;
 			while (sc.hasNext()) {
@@ -161,40 +160,20 @@ public class Component extends JComponent {
 					}
 				}
 				else {
-					String str2 = sc2.next();
 					String[] things  = str.split("_");
-					String[] things2 = str2.split("_");
 					for (int a = 0; a < things.length; a++) {
 						int k = Integer.parseInt(things[a]);
-						int k2 = Integer.parseInt(things2[a]);
 						double x1 = 0.0 + i * s;
 						double y1 = 0.0 + a * s;
 						double dis = distance(x1, y1);
 						boolean b = dis > r;
-						int[] lines = new int[] {0, 0, 0, 0};
-						if (k2 > 7) {
-							lines[0] = 1;
-							k2 -= 8;
-						}
-						if (k2 > 3) {
-							lines[1] = 1;
-							k2 -= 4;
-						}
-						if (k2 > 1) {
-							lines[2] = 1;
-							k2 -= 2;
-						}
-						if (k2 > 0) {
-							lines[3] = 1;
-						}
-						squares[i][a] = new Square(colors.get(k), x + i * s, y + a * s, s, b, lines);
+						squares[i][a] = new Square(colors.get(k), x + i * s, y + a * s, s, b);
 						
 					}
 					i ++;
 				}
 			}
 			sc.close();
-			sc2.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -223,32 +202,21 @@ public class Component extends JComponent {
 	
 	public void writeToFile() {
 		File f = new File(file);
-		File f2 = new File(fileoutline);
 		try {
 			if (f.createNewFile()) {
 				FileWriter fw = new FileWriter(f);
 				fw.write(buildFileString());
 				fw.close();
-				FileWriter fw2 = new FileWriter(f2);
-				fw2.write(buildOtherFileString());
-				fw2.close();
 				saved = true;
 			}
 			else {
-				File tempfile = new File("fuck.txt");
-				File otherTempFile = new File("fuck2.txt");
+				File tempfile = new File("temp.txt");
 				tempfile.createNewFile();
-				otherTempFile.createNewFile();
 				FileWriter fw = new FileWriter(tempfile);
 				fw.write(buildFileString());
-				FileWriter fw2 = new FileWriter(otherTempFile);
-				fw2.write(buildOtherFileString());
 				fw.close();
 				f.delete();
-				fw2.close();
-				f2.delete();
 				tempfile.renameTo(f);
-				otherTempFile.renameTo(f2);
 				saved = true;
 				
 			}
@@ -277,21 +245,7 @@ public class Component extends JComponent {
 		return ans;
 	}
 	
-	public String buildOtherFileString() {
-		String ans = "";
-		for (int i = 0; i < num; i++) {
-			for (int j = 0; j < num; j++) {
-				if (j == num - 1) {
-					ans += squares[i][j].getLinesToInt() + "\n";
-				}
-				else {
-					ans += squares[i][j].getLinesToInt() + "_";
-				}
-			}
-		}
-		return ans;
-	}
-	
+
 	public void initColorButtons() {
 		colorButtons = new ArrayList<Button>();
 		for (int i = 0; i < colors.size(); i++) {

@@ -20,7 +20,7 @@ public class Main {
 		JFrame frame = new JFrame();
 		int d = 900;
 		int num = 60; 
-		Component c = new Component("elephant", 1, d, num, 0, 0);
+		Component c = new Component("test3", 1, d, num, 0, 0);
 		Listener l = new Listener(c, frame);
 		c.addMouseListener(l);
 		c.addMouseMotionListener(l);
